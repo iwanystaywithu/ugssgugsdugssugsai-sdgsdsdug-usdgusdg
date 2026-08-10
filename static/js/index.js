@@ -185,8 +185,8 @@ function stopRuntimeTimer() {
     document.getElementById('bot-runtime').textContent = '00:00:00';
 }
 async function toggleBot() {
-    const isRunning = document.getElementById('bot-status-text').textContent.trim() === 'Ishlayapti';
     const btn = document.querySelector('button[data-bot-status]');
+    const isRunning = btn.getAttribute('data-bot-status') === 'running';
 
     // Disable button and show loading
     btn.disabled = true;
@@ -301,8 +301,8 @@ async function refreshBotStatus() {
         const bot_cycles = document.getElementById('bot-cycles');
 
         if (statusText) {
-            statusText.textContent = data.running ? 'Ishlayapti' : "To'xtagan";
-            statusText.className = `text-sm font-medium ${data.running ? 'text-green-400' : 'text-red-400'}`;
+            statusText.textContent = data.running ? 'Aktiv (Sniping)' : "To'xtatilgan";
+            statusText.className = data.running ? 'text-gradient-green font-bold' : 'text-red-400 font-bold';
             // Start/stop timer based on status
             if (data.running) {
                 startRuntimeTimer();
