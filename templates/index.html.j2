@@ -259,7 +259,7 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                         {% for gift_name, limit in settings.GIFT_LIMITS.items() %}
                         {% set gift_id = GIFT_MAPPINGS|find_key(gift_name) %}
-                        <div class="glass-card p-4 group cursor-pointer relative">
+                        <a href="/settings/gift-limits" class="block glass-card p-4 group cursor-pointer relative transition-transform hover:-translate-y-2">
                             <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur rounded-full px-2 py-1 text-xs font-bold text-yellow-400 z-10 border border-yellow-500/30 shadow-lg">
                                 Maks: {{ limit }}⭐
                             </div>
@@ -272,10 +272,12 @@
                                 {% endif %}
                             </div>
                             <h3 class="font-semibold text-white truncate text-center">{{ gift_name }}</h3>
-                            <div class="mt-2 w-full bg-blue-500/10 text-blue-400 text-xs text-center py-1.5 rounded-lg border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition">
-                                Qidirilmoqda
+                            <div class="mt-2 w-full bg-blue-500/10 text-blue-400 text-xs text-center py-1.5 rounded-lg border border-blue-500/20 group-hover:bg-purple-600 group-hover:text-white transition shadow-sm font-semibold flex items-center justify-center">
+                                <i class="fas fa-edit mr-1 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                <span class="group-hover:hidden">Qidirilmoqda</span>
+                                <span class="hidden group-hover:inline">Sozlash uchun bosing</span>
                             </div>
-                        </div>
+                        </a>
                         {% endfor %}
                     </div>
                     {% else %}
