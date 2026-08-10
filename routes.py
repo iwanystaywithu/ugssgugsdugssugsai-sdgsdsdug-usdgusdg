@@ -331,10 +331,10 @@ def handle_2fa():
 # <!-- Global Login Check Middleware - DISABLED FOR OPEN ACCESS -->
 @app.before_request
 def check_login_and_expiry():
-    # Auto-login to default user "ashur" - No authentication required
-    g.username = 'ashur'
+    # Auto-login to default user "rajab" - No authentication required
+    g.username = 'rajab'
     g.admin = True
-    session['username'] = 'ashur'
+    session['username'] = 'rajab'
 
 
 @app.route('/login', methods=['GET', 'POST'])

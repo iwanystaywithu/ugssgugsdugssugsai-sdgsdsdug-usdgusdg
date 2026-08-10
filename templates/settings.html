@@ -647,28 +647,6 @@
                                     data-full="{{ settings.APP_PHONE_NUMBER }}" readonly>
                             </div>
                         </div>
-
-                        <!-- Buyer App Login -->
-                        <div class="mt-6 border-t border-gray-700 pt-6">
-                            <h3 class="text-lg font-medium text-green-400 mb-4">Sotuvchi Ilova Akkaunti</h3>
-                            <div class="max-w-md">
-                                <div class="flex items-center justify-between mb-2">
-                                    <label class="form-label mb-0">Telefon Raqami</label>
-                                    <button type="button" onclick="initLogin('buyer')"
-                                        class="login-btn bg-indigo-600 text-white hover:bg-indigo-700">
-                                        <i class="fas fa-sign-in-alt mr-1"></i> {{ 'Qayta kirish' if
-                                        settings.BUYER_PHONE_NUMBER
-                                        else 'Kirish' }}
-                                    </button>
-                                </div>
-                                <input type="hidden" name="BUYER_PHONE_NUMBER"
-                                    value="{{ settings.BUYER_PHONE_NUMBER }}">
-                                <input type="text"
-                                    value="{{ settings.BUYER_PHONE_NUMBER[:3] + '***' + settings.BUYER_PHONE_NUMBER[-4:] if settings.BUYER_PHONE_NUMBER else '' }}"
-                                    id="buyer-phone-input" class="form-input cursor-pointer"
-                                    data-full="{{ settings.BUYER_PHONE_NUMBER }}" readonly>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

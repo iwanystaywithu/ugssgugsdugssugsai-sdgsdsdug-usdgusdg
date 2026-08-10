@@ -12,7 +12,7 @@ VAPID_PRIVATE_KEY = "WvbWZfe5mdZxMMIr_7JLnkGNV0A3g5Wg3M8M9YbVsbk"
 #                 subscription_info=sub,
 #                 data=json.dumps({"title": title, "body": body}),
 #                 vapid_private_key=VAPID_PRIVATE_KEY,
-#                 vapid_claims={"sub": "mailto:admin@ashur.gay"}
+                vapid_claims={"sub": "mailto:admin@localhost"}
 #             )
 #             # logger.info(f"Sent to {sub['endpoint']}")
 #         except Exception as e:

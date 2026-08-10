@@ -252,7 +252,7 @@
                 <div>
                     <div class="flex justify-between items-end mb-6">
                         <h2 class="text-2xl font-bold text-white"><i class="fas fa-crosshairs text-blue-500 mr-2"></i> Sniping Maqsadlari</h2>
-                        <a href="/settings/gift_limits" class="text-sm text-blue-400 hover:text-blue-300 flex items-center">Barchasini sozlash <i class="fas fa-arrow-right ml-1"></i></a>
+                        <a href="/settings/gift-limits" class="text-sm text-blue-400 hover:text-blue-300 flex items-center">Barchasini sozlash <i class="fas fa-arrow-right ml-1"></i></a>
                     </div>
                     
                     {% if settings.GIFT_LIMITS %}
@@ -283,7 +283,7 @@
                         <i class="fas fa-robot text-6xl text-slate-600 mb-4"></i>
                         <h3 class="text-xl font-bold text-gray-300">Maxsus Limitlar Yo'q</h3>
                         <p class="text-gray-500 mt-2">Barcha sovg'alar umumiy standart limit ({{ settings.DEFAULT_GIFTS_TO_BUY_MAX_PRICE }}⭐) narxida olinmoqda.</p>
-                        <a href="/settings/gift_limits" class="mt-4 inline-block btn-neon-blue px-6 py-2 rounded-lg">Limitlarni qo'shish</a>
+                        <a href="/settings/gift-limits" class="mt-4 inline-block btn-neon-blue px-6 py-2 rounded-lg">Limitlarni qo'shish</a>
                     </div>
                     {% endif %}
                 </div>
@@ -455,11 +455,11 @@
             }
             
             actionBtn.onclick = () => {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/toggle_bot';
-                document.body.appendChild(form);
-                form.submit();
+                // Remove the actionBtn onclick since we will use the fetch api provided by toggleBot function in index.js
+                closeConfirmDialog();
+                if (typeof toggleBot === "function") {
+                    toggleBot();
+                }
             };
         };
         
