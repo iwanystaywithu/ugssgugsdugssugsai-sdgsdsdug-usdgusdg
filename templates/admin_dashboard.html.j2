@@ -250,12 +250,12 @@
             <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-white mb-1">Admin Dashboard</h1>
-                        <p class="text-gray-400 text-sm">Manage all Gift Sniper users</p>
+                        <h1 class="text-3xl font-bold text-white mb-1">Admin Boshqaruvi</h1>
+                        <p class="text-gray-400 text-sm">Barcha GiftSniper foydalanuvchilarini boshqaring</p>
                     </div>
                     <div>
                         <a href="/" class="back-btn bg-blue-600 text-white hover:bg-blue-700 flex items-center">
-                            <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                            <i class="fas fa-arrow-left mr-2"></i>Bosh Sahifaga
                         </a>
                     </div>
                 </div>
@@ -264,7 +264,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- User List -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card custom-scrollbar">
-                    <h2 class="section-title text-gray-300">User Management</h2>
+                    <h2 class="section-title text-gray-300">Foydalanuvchi Boshqaruvi</h2>
 
                     <!-- Add table-container class here -->
                     <div class="table-container">
@@ -273,22 +273,22 @@
                                 <tr>
                                     <th
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                        Username</th>
+                                        Foydalanuvchi Nomi</th>
                                     <th
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                        Expires</th>
+                                        Muddati Tugadi</th>
                                     <th
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                        Status</th>
+                                        Holati</th>
                                     <th
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                        Bot Status</th>
+                                        Bot Holati</th>
                                     <th
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                        Current Balance</th>
+                                        Hozirgi Balans</th>
                                     <th
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                        Actions</th>
+                                        Harakatlar</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-700">
@@ -300,37 +300,37 @@
                                         <span class="badge badge-info ml-2">Admin</span>
                                         {% endif %}
                                         {% if user.is_owner %}
-                                        <span class="badge badge-purple ml-2">Owner</span>
+                                        <span class="badge badge-purple ml-2">Egasi</span>
                                         {% endif %}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-gray-300">
                                         {{ user.expire_date }}
-                                        <div class="text-xs text-gray-400">{{ user.days_left }} days left</div>
+                                        <div class="text-xs text-gray-400">{{ user.days_left }} kun qoldi</div>
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         {% if user.active %}
                                         {% if user.days_left > 7 %}
-                                        <span class="badge badge-success">Active</span>
+                                        <span class="badge badge-success">Faol</span>
                                         {% elif user.days_left > 0 %}
-                                        <span class="badge badge-warning">Expiring</span>
+                                        <span class="badge badge-warning">Tugayapti</span>
                                         {% else %}
-                                        <span class="badge badge-danger">Expired</span>
+                                        <span class="badge badge-danger">Tugagan</span>
                                         {% endif %}
                                         {% else %}
-                                        <span class="badge bg-gray-600">Disabled</span>
+                                        <span class="badge bg-gray-600">O'chirilgan</span>
                                         {% endif %}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         {% if user.bot_running %}
-                                        <span class="badge badge-success">Running</span>
+                                        <span class="badge badge-success">Ishlayapti</span>
                                         {% if user.can_disable_bot %}
                                         <button onclick="stopUserBot('{{ user.username }}')"
                                             class="ml-2 text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">
-                                            Stop Bot
+                                            Botni To'xtatish
                                         </button>
                                         {% endif %}
                                         {% else %}
-                                        <span class="badge bg-gray-600">Stopped</span>
+                                        <span class="badge bg-gray-600">To'xtagan</span>
                                         {% endif %}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
@@ -393,55 +393,55 @@
 
                 <!-- Create User Form -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                    <h2 class="section-title text-gray-300">Create New User</h2>
+                    <h2 class="section-title text-gray-300">Yangi Foydalanuvchi Yaratish</h2>
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-gray-300 mb-2">Username</label>
-                            <input type="text" id="new-username" class="form-input" placeholder="Enter username">
+                            <label class="block text-gray-300 mb-2">Foydalanuvchi Nomi</label>
+                            <input type="text" id="new-username" class="form-input" placeholder="Foydalanuvchi nomini kiriting">
                         </div>
                         <div>
-                            <label class="block text-gray-300 mb-2">Password</label>
-                            <input type="password" id="new-password" class="form-input" placeholder="Enter password">
+                            <label class="block text-gray-300 mb-2">Parol</label>
+                            <input type="password" id="new-password" class="form-input" placeholder="Parolni kiriting">
                         </div>
                         <div>
-                            <label class="block text-gray-300 mb-2">Subscription Length (days)</label>
+                            <label class="block text-gray-300 mb-2">Obuna Muddati (kunlar)</label>
                             <input type="number" id="new-expiry-days" class="form-input" value="30" min="1" required>
                         </div>
                         {% if is_owner %}
                         <div class="flex items-center space-x-2">
                             <input type="checkbox" id="new-is-admin" class="form-checkbox h-4 w-4 text-blue-600">
-                            <label for="new-is-admin" class="text-gray-300">Make Admin</label>
+                            <label for="new-is-admin" class="text-gray-300">Admin Qilish</label>
                         </div>
                         {% endif %}
                         <button onclick="createUser()"
                             class="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                            <i class="fas fa-user-plus mr-2"></i> Create User
+                            <i class="fas fa-user-plus mr-2"></i> Foydalanuvchi Yaratish
                         </button>
                     </div>
                 </div>
 
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                    <h2 class="section-title text-gray-300">Proxy Management</h2>
+                    <h2 class="section-title text-gray-300">Proxy Boshqaruvi</h2>
 
                     <div class="mb-4">
                         <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-gray-300">Proxy Pool Status</h3>
+                            <h3 class="text-gray-300">Proxy Buvi Holati</h3>
                             <button onclick="refreshProxyStats()" class="text-blue-400 hover:text-blue-300">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
                         <div id="proxy-stats" class="grid grid-cols-3 gap-2 mb-4">
                             <div class="bg-gray-700 p-3 rounded text-center">
-                                <div class="text-sm text-gray-400">Total</div>
+                                <div class="text-sm text-gray-400">Jami</div>
                                 <div id="proxy-total" class="text-xl font-bold">0</div>
                             </div>
                             <div class="bg-gray-700 p-3 rounded text-center">
-                                <div class="text-sm text-gray-400">Available</div>
+                                <div class="text-sm text-gray-400">Mavjud</div>
                                 <div id="proxy-available" class="text-xl font-bold text-green-400">0</div>
                             </div>
                             <div class="bg-gray-700 p-3 rounded text-center">
-                                <div class="text-sm text-gray-400">In Use</div>
+                                <div class="text-sm text-gray-400">Ishlatilmoqda</div>
                                 <div id="proxy-in-use" class="text-xl font-bold text-yellow-400">0</div>
                             </div>
                         </div>
@@ -449,36 +449,36 @@
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-gray-300 mb-2">Add New Proxy</label>
+                            <label class="block text-gray-300 mb-2">Yangi Proxy Qo'shish</label>
                             <div class="grid grid-cols-4 gap-2">
                                 <input type="text" id="proxy-host" class="form-input col-span-2" placeholder="Host">
                                 <input type="number" id="proxy-port" class="form-input" placeholder="Port" min="1"
                                     max="65535">
                                 <button onclick="addProxy()" class="bg-blue-600 text-white rounded hover:bg-blue-700">
-                                    Add
+                                    Qo'shish
                                 </button>
                             </div>
                             <div class="grid grid-cols-2 gap-2 mt-2">
                                 <input type="text" id="proxy-username" class="form-input"
-                                    placeholder="Username (optional)">
+                                    placeholder="Foydalanuvchi nomi (ixtiyoriy)">
                                 <input type="password" id="proxy-password" class="form-input"
-                                    placeholder="Password (optional)">
+                                    placeholder="Parol (ixtiyoriy)">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-gray-300 mb-2">Proxy List</label>
+                            <label class="block text-gray-300 mb-2">Proxy Ro'yxati</label>
                             <div class="bg-gray-700 rounded-lg p-3 max-h-64 overflow-y-auto custom-scrollbar">
                                 <table class="min-w-full divide-y divide-gray-600">
                                     <thead>
                                         <tr>
                                             <th class="px-2 py-1 text-left text-xs text-gray-400">Host:Port</th>
-                                            <th class="px-2 py-1 text-left text-xs text-gray-400">Status</th>
-                                            <th class="px-2 py-1 text-left text-xs text-gray-400">Actions</th>
+                                            <th class="px-2 py-1 text-left text-xs text-gray-400">Holati</th>
+                                            <th class="px-2 py-1 text-left text-xs text-gray-400">Harakatlar</th>
                                         </tr>
                                     </thead>
                                     <tbody id="proxy-list" class="divide-y divide-gray-600">
-                                        <!-- Proxies will be added here by JavaScript -->
+                                        <!-- Proxy-lar JavaScript orqali qo'shiladi -->
                                     </tbody>
                                 </table>
                             </div>
@@ -491,33 +491,33 @@
         <!-- Edit User Modal -->
         <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
             <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-xl font-semibold text-white mb-4">Edit User</h3>
+                <h3 class="text-xl font-semibold text-white mb-4">Foydalanuvchini Tahrirlash</h3>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-gray-300 mb-2">Username</label>
+                        <label class="block text-gray-300 mb-2">Foydalanuvchi Nomi</label>
                         <input type="text" id="edit-username" class="form-input" readonly>
                     </div>
 
                     <!-- Only show expiry date field for owner or when editing non-admin -->
                     <div id="expiry-field-container">
-                        <label class="block text-gray-300 mb-2">New Expiry Date</label>
+                        <label class="block text-gray-300 mb-2">Yangi Muddati Tugash Sanasi</label>
                         <input type="date" id="edit-expiry" class="form-input">
                     </div>
 
                     <div>
-                        <label class="block text-gray-300 mb-2">New Password (leave blank to keep current)</label>
-                        <input type="password" id="edit-password" class="form-input" placeholder="Enter new password">
+                        <label class="block text-gray-300 mb-2">Yangi Parol (hozirgi parolni saqlash uchun bo'sh qoldiring)</label>
+                        <input type="password" id="edit-password" class="form-input" placeholder="Yangi parolni kiriting">
                     </div>
 
                     <div class="flex space-x-3">
                         <button onclick="updateUser()"
                             class="flex-1 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                            Update
+                            Yangilash
                         </button>
                         <button onclick="hideEditModal()"
                             class="flex-1 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                            Cancel
+                            Bekor qilish
                         </button>
                     </div>
                 </div>
@@ -528,24 +528,24 @@
         <div id="delete-modal"
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
             <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-xl font-semibold text-white mb-4">Confirm Deletion</h3>
-                <p class="text-gray-300 mb-6">Are you sure you want to delete user <span id="delete-username"
+                <h3 class="text-xl font-semibold text-white mb-4">O'chirishni Tasdiqlash</h3>
+                <p class="text-gray-300 mb-6">Haqiqatan ham foydalanuvchini o'chirmisiz <span id="delete-username"
                         class="font-bold"></span>?</p>
                 <div class="flex space-x-3">
                     <button onclick="deleteUser()"
                         class="flex-1 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
-                        Delete
+                        O'chirish
                     </button>
                     <button onclick="hideDeleteModal()"
                         class="flex-1 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                        Cancel
+                        Bekor qilish
                     </button>
                 </div>
             </div>
         </div>
         <script>
             function stopUserBot(username) {
-                if (!confirm(`Are you sure you want to stop ${username}'s bot?`)) {
+                if (!confirm(`Haqiqatan ham ${username} ning botini to'xtatmoqchisiz?`)) {
                     return;
                 }
 
@@ -561,15 +561,15 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification(`Bot for ${username} stopped successfully`, 'success');
+                            showNotification(`${username} ning boti muvaffaqiyatli to'xtatildi`, 'success');
                             window.location.reload();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showNotification('An error occurred while stopping the bot', 'error');
+                        showNotification('Botni to'xtatayotganda xato yuz berdi', 'error');
                     });
             }
 
@@ -608,12 +608,12 @@
                 const isAdmin = {% if is_owner %} document.getElementById('new-is-admin').checked{% else %} false{% endif %};
 
             if (!username || !password) {
-                showNotification('Username and password are required', 'info');
+                showNotification('Foydalanuvchi nomi va parol zarur', 'info');
                 return;
             }
 
             if (isNaN(expiryDays)) {
-                showNotification('Please enter a valid number for expiration days', 'warning');
+                showNotification('Iltimos, muddati to'liq bo'lish kunlari uchun to'g'ri raqam kiriting', 'warning');
                 return;
             }
 
@@ -632,15 +632,15 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        showNotification('User created successfully', 'success');
+                        showNotification('Foydalanuvchi muvaffaqiyatli yaratildi', 'success');
                         window.location.reload();
                     } else {
-                        showNotification('Error: ' + data.message, 'error');
+                        showNotification('Xato: ' + data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showNotification('An error occurred', 'error');
+                    showNotification('Xato yuz berdi', 'error');
                 });
             }
 
@@ -671,7 +671,7 @@
                 const expiryFieldHidden = document.getElementById('expiry-field-container').classList.contains('hidden');
 
                 if (expiryFieldHidden && newExpiry) {
-                    showNotification('Only owner can modify admin expiry dates', 'error');
+                    showNotification('Faqat egasi admin-ning muddatlarini o'zgartirishi mumkin', 'error');
                     return;
                 }
 
@@ -699,20 +699,20 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification('User updated successfully', 'success');
+                            showNotification('Foydalanuvchi muvaffaqiyatli yangilandi', 'success');
                             window.location.reload();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showNotification('An error occurred', 'error');
+                        showNotification('Xato yuz berdi', 'error');
                     });
             }
 
             function promoteAdmin(username) {
-                if (!confirm(`Are you sure you want to make ${username} an admin?`)) {
+                if (!confirm(`Haqiqatan ham ${username} ni admin qilmoqchisiz?`)) {
                     return;
                 }
 
@@ -728,20 +728,20 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification(`${username} is now an admin`, 'success');
+                            showNotification(`${username} endi admin bo'ldi`, 'success');
                             window.location.reload();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showNotification('An error occurred', 'error');
+                        showNotification('Xato yuz berdi', 'error');
                     });
             }
 
             function demoteAdmin(username) {
-                if (!confirm(`Are you sure you want to remove admin privileges from ${username}?`)) {
+                if (!confirm(`Haqiqatan ham ${username} ning admin huquqlarini olib tashmoqchisiz?`)) {
                     return;
                 }
 
@@ -757,15 +757,15 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification(`${username} is no longer an admin`, 'success');
+                            showNotification(`${username} endi admin emas`, 'success');
                             window.location.reload();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showNotification('An error occurred', 'error');
+                        showNotification('Xato yuz berdi', 'error');
                     });
             }
 
@@ -794,15 +794,15 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification('User deleted successfully', 'success');
+                            showNotification('Foydalanuvchi muvaffaqiyatli o\'chirildi', 'success');
                             window.location.reload();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showNotification('An error occurred', 'error');
+                        showNotification('Xato yuz berdi', 'error');
                     });
             }
         </script>
@@ -870,8 +870,8 @@
                                 row.className = 'hover:bg-gray-600';
 
                                 const statusBadge = proxy.in_use
-                                    ? `<span class="badge badge-warning">In Use (${proxy.used_by || 'unknown'})</span>`
-                                    : '<span class="badge badge-success">Available</span>';
+                                    ? `<span class="badge badge-warning">Ishlatilmoqda (${proxy.used_by || 'noma\'lum'})</span>`
+                                    : '<span class="badge badge-success">Mavjud</span>';
 
                                 row.innerHTML = `
                             <td class="px-2 py-1 text-sm text-gray-300">
@@ -883,11 +883,11 @@
                             </td>
                             <td class="px-2 py-1 text-sm">
                                 <button onclick="removeProxy('${proxy.host}', ${proxy.port})" 
-                                    class="text-red-400 hover:text-red-300 mr-2" title="Remove">
+                                    class="text-red-400 hover:text-red-300 mr-2" title="O'chirish">
                                     <i class="fas fa-trash"></i>
                                 </button>
                                 <button onclick="testProxy('${proxy.host}', ${proxy.port})" 
-                                    class="text-blue-400 hover:text-blue-300" title="Test">
+                                    class="text-blue-400 hover:text-blue-300" title="Tekshirish">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </td>
@@ -906,7 +906,7 @@
                 const password = document.getElementById('proxy-password').value;
 
                 if (!host || !port) {
-                    showNotification('Host and port are required', 'error');
+                    showNotification('Host va port zarur', 'error');
                     return;
                 }
 
@@ -926,20 +926,20 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification('Proxy added successfully', 'success');
+                            showNotification('Proxy muvaffaqiyatli qo\'shildi', 'success');
                             document.getElementById('proxy-host').value = '';
                             document.getElementById('proxy-port').value = '';
                             document.getElementById('proxy-username').value = '';
                             document.getElementById('proxy-password').value = '';
                             refreshProxyStats();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     });
             }
 
             function removeProxy(host, port) {
-                if (!confirm(`Are you sure you want to remove proxy ${host}:${port}?`)) {
+                if (!confirm(`Haqiqatan ham ${host}:${port} proxy-ni olib tashmoqchisiz?`)) {
                     return;
                 }
 
@@ -957,16 +957,16 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            showNotification('Proxy removed successfully', 'success');
+                            showNotification('Proxy muvaffaqiyatli olib tashlandi', 'success');
                             refreshProxyStats();
                         } else {
-                            showNotification('Error: ' + data.message, 'error');
+                            showNotification('Xato: ' + data.message, 'error');
                         }
                     });
             }
 
             function testProxy(host, port) {
-                showNotification('Proxy testing not implemented yet', 'info');
+                showNotification('Proxy tekshiruvi hali tayyor emas', 'info');
             }
 
             // Load proxy stats when page loads

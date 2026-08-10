@@ -101,7 +101,7 @@ def settings():
         config.save_settings(g.username, new_settings)
         # Stop the bot if it's running to apply new settings
         stop_bot(g.username)
-        flash('Settings saved successfully!', 'success')
+        flash('Sozlamalar muvaffaqiyatli saqlandi!', 'success')
 
         return redirect(url_for('settings'))
 
@@ -134,7 +134,7 @@ def gift_limits():
         # Save the new limits
         config.save_settings(g.username, {'GIFT_LIMITS': gift_limits})
         stop_bot(g.username)
-        flash('Gift limits updated successfully!', 'success')
+        flash("Sovg'a chegaralari muvaffaqiyatli yangilandi!", 'success')
         return redirect(url_for('gift_limits'))
 
     # For GET requests, show the form
@@ -230,23 +230,16 @@ def handle_login():
     username = g.username
     
     if not phone or login_type not in ['app', 'buyer']:
-        return jsonify({'success': False, 'message': 'Invalid parameters'})
+        return jsonify({'success': False, 'message': "Noto'g'ri parametrlar"})
 
-    # Validate required settings
-    missing = []
+    # Validate required settings (default'lar .env dan olinadi)
     user_settings = config.load_settings(username)
     if login_type == 'app':
-        if not user_settings['APP_API_ID']:
-            missing.append('App ID')
-        if not user_settings['APP_API_HASH']:
-            missing.append('App API Hash')
+        if not user_settings.get('APP_API_ID') or not user_settings.get('APP_API_HASH'):
+            return jsonify({'success': False, 'message': "API ID va Hash sozlanmagan. Admin bilan bog'laning."})
     elif login_type == 'buyer':
-        if not user_settings['BUYER_API_ID']:
-            missing.append('Buyer App ID')
-        if not user_settings['BUYER_API_HASH']:
-            missing.append('Buyer App API Hash')
-    if missing:
-        return jsonify({'success': False, 'message': f"Missing: {', '.join(missing)}"})
+        if not user_settings.get('BUYER_API_ID') or not user_settings.get('BUYER_API_HASH'):
+            return jsonify({'success': False, 'message': "Sotuvchi API ID va Hash sozlanmagan. Admin bilan bog'laning."})
 
     try:
         # Disconnect any existing session first

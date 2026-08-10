@@ -3,7 +3,17 @@ import json
 import os
 from threading import Lock
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Default API credentials from .env (barcha foydalanuvchilar uchun umumiy)
+DEFAULT_APP_API_ID = os.getenv('DEFAULT_APP_API_ID', '')
+DEFAULT_APP_API_HASH = os.getenv('DEFAULT_APP_API_HASH', '')
+DEFAULT_BUYER_API_ID = os.getenv('DEFAULT_BUYER_API_ID', '')
+DEFAULT_BUYER_API_HASH = os.getenv('DEFAULT_BUYER_API_HASH', '')
 
 SUBSCRIPTIONS_FILE = os.path.join(BASE_DIR, 'data', "subscriptions.json")
 HISTORY_RETENTION_DAYS = 7
@@ -44,16 +54,28 @@ class UserConfigManager:
     def load_config(self, username):
         config_path = self.get_config_path(username)
         if not config_path.exists():
-            return self.default_config.copy()
+            config = self.default_config.copy()
+        else:
+            with self.get_user_lock(username):
+                with open(config_path, 'r') as f:
+                    user_config = json.load(f)
+                    # Remove '@' from ADMIN_RECIPIENT_USER if it exists
+                    if 'ADMIN_RECIPIENT_USER' in user_config:
+                        user_config['ADMIN_RECIPIENT_USER'] = user_config['ADMIN_RECIPIENT_USER'].lstrip('@')
+                    # Merge with defaults to ensure all keys exist
+                    config = {**self.default_config, **user_config}
 
-        with self.get_user_lock(username):
-            with open(config_path, 'r') as f:
-                user_config = json.load(f)
-                # Remove '@' from ADMIN_RECIPIENT_USER if it exists
-                if 'ADMIN_RECIPIENT_USER' in user_config:
-                    user_config['ADMIN_RECIPIENT_USER'] = user_config['ADMIN_RECIPIENT_USER'].lstrip('@')
-                # Merge with defaults to ensure all keys exist
-                return {**self.default_config, **user_config}
+        # Fallback: agar foydalanuvchida API ID/Hash bo'lmasa, .env default'larini ishlatish
+        if not config.get('APP_API_ID'):
+            config['APP_API_ID'] = DEFAULT_APP_API_ID
+        if not config.get('APP_API_HASH'):
+            config['APP_API_HASH'] = DEFAULT_APP_API_HASH
+        if not config.get('BUYER_API_ID'):
+            config['BUYER_API_ID'] = DEFAULT_BUYER_API_ID or DEFAULT_APP_API_ID
+        if not config.get('BUYER_API_HASH'):
+            config['BUYER_API_HASH'] = DEFAULT_BUYER_API_HASH or DEFAULT_APP_API_HASH
+
+        return config
 
     def save_config(self, username, new_data):
         config_path = self.get_config_path(username)

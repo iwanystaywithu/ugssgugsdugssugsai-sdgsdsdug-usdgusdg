@@ -1,680 +1,477 @@
 <!DOCTYPE html>
 <html lang="uz">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GiftSniper Boshqaruvi</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
-            #bot-runtime {
-                font-family: 'Courier New', monospace;
-                letter-spacing: 1px;
-            }
-
-            .dark-mode #bot-runtime {
-                color: #9ae6b4;
-            }
-
-            .notification-container {
-                position: fixed;
-                top: 1rem;
-                right: 1rem;
-                width: 320px;
-                max-width: 90%;
-                z-index: 1000;
-            }
-
-            .notification {
-                position: relative;
-                padding: 1rem;
-                margin-bottom: 1rem;
-                border-radius: 0.375rem;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                display: flex;
-                align-items: center;
-                animation: slideIn 0.3s ease-out forwards;
-                opacity: 0;
-                transform: translateX(100%);
-            }
-
-            .notification.success {
-                background-color: #10B981;
-                color: white;
-            }
-
-            .notification.error {
-                background-color: #EF4444;
-                color: white;
-            }
-
-            .notification.warning {
-                background-color: #F59E0B;
-                color: white;
-            }
-
-            .notification.info {
-                background-color: #3B82F6;
-                color: white;
-            }
-
-            .notification-icon {
-                margin-right: 0.75rem;
-                font-size: 1.25rem;
-            }
-
-            .notification-close {
-                margin-left: auto;
-                cursor: pointer;
-                opacity: 0.7;
-                transition: opacity 0.2s;
-            }
-
-            .notification-close:hover {
-                opacity: 1;
-            }
-
-            @keyframes slideIn {
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-            }
-
-            @keyframes fadeOut {
-                to {
-                    opacity: 0;
-                    transform: translateX(100%);
-                }
-            }
-
-            .dark-mode {
-                background-color: #1a202c;
-                color: #e2e8f0;
-            }
-
-            .dark-mode .bg-white {
-                background-color: #2d3748;
-            }
-
-            .dark-mode .text-gray-800 {
-                color: #e2e8f0;
-            }
-
-            .dark-mode .bg-gray-50 {
-                background-color: #4a5568;
-            }
-
-            .dark-mode .text-gray-700 {
-                color: #cbd5e0;
-            }
-
-            .dark-mode .border {
-                border-color: #4a5568;
-            }
-
-            .dark-mode input,
-            .dark-mode select {
-                background-color: #2d3748;
-                color: #e2e8f0;
-                border-color: #4a5568;
-            }
-
-            .dark-mode .bg-blue-500:hover {
-                background-color: #3182ce;
-            }
-
-            .dark-mode .bg-green-500:hover {
-                background-color: #38a169;
-            }
-
-            .dark-mode .bg-purple-500:hover {
-                background-color: #805ad5;
-            }
-
-            .dark-mode .bg-red-500:hover {
-                background-color: #e53e3e;
-            }
-
-            .dark-mode .text-blue-700 {
-                color: #90cdf4;
-            }
-
-            .dark-mode .text-green-700 {
-                color: #9ae6b4;
-            }
-
-            .dark-mode .text-purple-800 {
-                color: #b794f4;
-            }
-
-            .dark-mode .text-green-800 {
-                color: #9ae6b4;
-            }
-
-            .log-success {
-                color: #4ade80;
-            }
-
-            .log-error {
-                color: #f87171;
-            }
-
-            .log-info {
-                color: #60a5fa;
-            }
-
-            .log-warning {
-                color: #fbbf24;
-            }
-
-            .quick-logs {
-                max-height: 300px;
-                overflow-y: auto;
-                scrollbar-width: thin;
-                scrollbar-color: #4b5563 #1f2937;
-                /* thumb and track color */
-            }
-
-            .quick-logs::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            .quick-logs::-webkit-scrollbar-track {
-                background: #1f2937;
-                border-radius: 4px;
-            }
-
-            .quick-logs::-webkit-scrollbar-thumb {
-                background-color: #4b5563;
-                border-radius: 4px;
-                border: 2px solid #1f2937;
-            }
-
-            #pagination-controls button:not(:disabled):hover {
-                background-color: #4b5563;
-                transform: translateY(-1px);
-            }
-
-            #pagination-controls {
-                transition: all 0.2s ease;
-            }
-
-            /* New enhancements */
-            .stat-card {
-                transition: transform 0.2s, box-shadow 0.2s;
-                min-height: 120px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
-
-            .stat-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-            }
-
-            .stat-title {
-                font-size: 0.9rem;
-                opacity: 0.8;
-                margin-bottom: 0.5rem;
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
-                font-weight: 700;
-            }
-
-            .section-title {
-                position: relative;
-                padding-bottom: 0.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .section-title:after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 50px;
-                height: 3px;
-                background: linear-gradient(90deg, #4f46e5, #10b981);
-                border-radius: 3px;
-            }
-
-            .avoid-list {
-                max-height: 100px;
-                overflow-y: auto;
-                padding-right: 0.5rem;
-            }
-
-            .avoid-list::-webkit-scrollbar {
-                width: 6px;
-            }
-
-            .avoid-list::-webkit-scrollbar-track {
-                background: #374151;
-                /* bg-gray-700 */
-                border-radius: 3px;
-            }
-
-            .avoid-list::-webkit-scrollbar-thumb {
-                background-color: #6B7280;
-                /* bg-gray-500 */
-                border-radius: 3px;
-            }
-
-            .avoid-list::-webkit-scrollbar-thumb:hover {
-                background-color: #9CA3AF;
-                /* bg-gray-400 */
-            }
-
-            .avoid-list li {
-                margin-bottom: 0.25rem;
-                padding-left: 0.5rem;
-            }
-
-            /* Gifts to Avoid list styling */
-            .avoid-list ul {
-                list-style: none;
-                padding-left: 0;
-            }
-
-            .avoid-list li {
-                display: flex;
-                align-items: center;
-                padding: 2px 0;
-            }
-
-            .stat-card {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: flex-start;
-            }
-
-            .avoid-list {
-                align-self: stretch;
-                margin-top: 0;
-            }
-        </style>
-        <style>
-            .image-container {
-                position: relative;
-                width: 40px;
-                height: 40px;
-                margin-right: 1rem;
-            }
-
-            .image-placeholder {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: rgba(255, 255, 255, 0.05);
-                border-radius: 0.25rem;
-            }
-
-            .gift-image {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                border-radius: 0.25rem;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
-            .gift-image.loaded {
-                opacity: 1;
-            }
-
-            .fa-spinner {
-                animation: spin 1s linear infinite;
-                color: #9CA3AF;
-            }
-
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-        </style>
-        <style>
-            .btn-loading {
-                position: relative;
-                pointer-events: none;
-            }
-
-            .btn-loading::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 20px;
-                height: 20px;
-                margin: -10px 0 0 -10px;
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                border-radius: 50%;
-                border-top-color: white;
-                animation: btn-spin 0.6s linear infinite;
-            }
-
-            @keyframes btn-spin {
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-        </style>
-    </head>
-
-    <body class="dark-mode bg-gray-900 min-h-screen">
-        <div class="container mx-auto px-4 py-8">
-            <!-- Header Section -->
-            <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h1 class="text-3xl font-bold text-white mb-1">GiftSniper Boshqaruvi</h1>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm text-gray-400">Holati:</span>
-                            <span id="bot-status-text"
-                                class="text-sm font-medium {% if bot_status %}text-green-400{% else %}text-red-400{% endif %}">
-                                {% if bot_status %}Ishlayapti{% else %}To'xtagan{% endif %}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                        <button data-bot-status="{{ 'running' if bot_status else 'stopped' }}"
-                            onclick="showConfirmDialog(this)"
-                            class="px-4 py-2 rounded-lg text-white font-medium flex items-center {% if bot_status
-                        %}bg-red-600 hover:bg-red-700{% else %}bg-green-600 hover:bg-green-700{% endif %} transition-colors">
-                            {% if bot_status %}
-                            <i class="fas fa-stop mr-2"></i>To'xtatish
-                            {% else %}
-                            <i class="fas fa-play mr-2"></i>Ishga Tushirish
-                            {% endif %}
-                        </button>
-                        <a href="/settings"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center transition-colors">
-                            <i class="fas fa-cog mr-2"></i>Sozlamalar
-                        </a>
-                        {% if is_admin %}
-                        <a href="/admin/dashboard"
-                            class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 flex items-center transition-colors">
-                            <i class="fas fa-user-shield mr-2"></i>Admin Boshqaruvi
-                        </a>
-                        {% endif %}
-                        <form action="/logout" method="POST" class="inline">
-                            <button type="submit"
-                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center transition-colors">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Chiqish
-                            </button>
-                        </form>
-                    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiftSniper Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Nav Bar */
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* Buttons */
+        .btn-neon-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-blue:hover {
+            box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        .btn-neon-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-green:hover {
+            box-shadow: 0 6px 20px 0 rgba(16, 185, 129, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-neon-red {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-red:hover {
+            box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Gradient Texts */
+        .text-gradient {
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-gradient-green {
+            background: linear-gradient(to right, #34d399, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar for activity */
+        .activity-feed::-webkit-scrollbar {
+            width: 6px;
+        }
+        .activity-feed::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1); 
+            border-radius: 4px;
+        }
+        .activity-feed::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1); 
+            border-radius: 4px;
+        }
+        .activity-feed::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2); 
+        }
+
+        /* Notifications */
+        .notification-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+        .notification {
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .notification.success { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+        .notification.error { background-color: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+        .notification.warning { background-color: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
+
+        /* NFT Cards */
+        .nft-image-container {
+            position: relative;
+            aspect-ratio: 1;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nft-image {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+        .glass-card:hover .nft-image {
+            transform: scale(1.1);
+        }
+        
+        /* Log colors */
+        .log-success { color: #34d399; }
+        .log-error { color: #f87171; }
+        .log-info { color: #60a5fa; }
+        .log-warning { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="glass-nav py-4 px-6 md:px-12 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                <i class="fas fa-crosshairs text-white"></i>
+            </div>
+            <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">Gift<span class="text-gradient">Sniper</span></h1>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <!-- Wallet Display -->
+            <div class="hidden md:flex items-center space-x-4 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
+                <div class="flex items-center">
+                    <i class="fas fa-gem text-cyan-400 mr-2 text-sm"></i>
+                    <span id="current-balance-ton" class="font-semibold text-white">{{ current_balance_ton }} TON</span>
+                </div>
+                <div class="w-px h-4 bg-slate-600"></div>
+                <div class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-2 text-sm"></i>
+                    <span id="current-balance-stars" class="font-semibold text-white">{{ current_balance_stars }} ⭐</span>
                 </div>
             </div>
-            <div id="confirmDialog"
-                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                <div class="bg-white dark-mode:bg-gray-800 p-6 rounded-xl shadow-xl w-full max-w-sm">
-                    <h2 class="text-lg font-semibold mb-4 text-gray-800 dark-mode:text-gray-100" id="confirmTitle">
-                        Tasdiqlash
+
+            <!-- Actions -->
+            <a href="/settings" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-gray-300 hover:text-white hover:bg-slate-700 transition">
+                <i class="fas fa-cog"></i>
+            </a>
+            {% if is_admin %}
+            <a href="/admin/dashboard" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-gray-300 hover:text-yellow-400 hover:bg-slate-700 transition">
+                <i class="fas fa-user-shield"></i>
+            </a>
+            {% endif %}
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-slate-700 transition">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        
+        <!-- Hero / Control Panel -->
+        <div class="glass-card p-8 mb-8 relative overflow-hidden">
+            <!-- Decorative blur -->
+            <div class="absolute -right-20 -top-20 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl"></div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center relative z-10">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-3xl font-bold text-white mb-2">Bot Holati: 
+                        <span id="bot-status-text" class="{% if bot_status %}text-gradient-green{% else %}text-red-400{% endif %}">
+                            {% if bot_status %}Aktiv (Sniping){% else %}To'xtatilgan{% endif %}
+                        </span>
                     </h2>
-                    <p class="text-gray-700 dark-mode:text-gray-300" id="confirmMessage">Rostan ham davom etmoqchisiz?
+                    <p class="text-gray-400 flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Uptime: <span id="bot-runtime" class="ml-2 font-mono text-blue-300 tracking-wider text-lg">00:00:00</span>
                     </p>
-                    <div class="mt-6 flex justify-end gap-3">
-                        <button onclick="closeConfirmDialog()"
-                            class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:text-white transition">Bekor qilish</button>
-                        <button id="confirmAction"
-                            class="px-4 py-2 rounded-lg text-white font-semibold transition"></button>
-                    </div>
+                    <p class="text-gray-400 mt-1 flex items-center text-sm">
+                        <i class="fas fa-sync-alt mr-2"></i> Skan oralig'i: <span class="text-white ml-1 font-semibold">{{ settings.SLEEP_BETWEEN_CYCLES }}s</span>
+                    </p>
                 </div>
-            </div>
-            <!-- Main Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Current Balance -->
-                <div class="bg-gray-700 p-5 rounded-xl shadow-md stat-card">
-                    <div>
-                        <h3 class="stat-title text-gray-300">Hozirgi Balans</h3>
-                        <p id="current-balance-stars" class="stat-value text-white">
-                            {{ current_balance_stars }}⭐
-                        </p>
-                    </div>
-                    <div class="text-green-400 text-sm">
-                        <i class="fas fa-coins mr-1"></i> Mavjud yulduzlar
-                    </div>
-                </div>
-                <!-- TON Balance -->
-                <div class="bg-gray-700 p-5 rounded-xl shadow-md stat-card">
-                    <div>
-                        <h3 class="stat-title text-gray-300">TON Balance</h3>
-                        <p id="current-balance-ton" class="stat-value text-white">
-                            {{ current_balance_ton }}💎
-                        </p>
-                    </div>
-                    <div class="text-cyan-400 text-sm">
-                        <i class="fas fa-gem mr-1"></i> Available TON
-                    </div>
-                </div>
-                <!-- Bot Runtime -->
-                <div class="bg-gray-700 p-5 rounded-xl shadow-md stat-card">
-                    <div>
-                        <h3 class="stat-title text-gray-300">Bot Runtime</h3>
-                        <p id="bot-runtime" class="stat-value text-white">
-                            00:00:00
-                        </p>
-                    </div>
-                    <div class="text-blue-400 text-sm">
-                        <i class="fas fa-clock mr-1"></i> Active time
-                    </div>
-                </div>
-
-                <!-- Subscription Expiration -->
-                {% if expiry_timestamp %}
-                <div id="subscription-info" data-expiry="{{ expiry_timestamp }}" style="display:none;"></div>
-                <div class="bg-gray-700 p-5 rounded-xl shadow-md stat-card">
-                    <div>
-                        <h3 class="stat-title text-gray-300">Subscription Expiration</h3>
-                        <p id="countdown" class="stat-value text-white">
-                            <span id="expiry-date" class="block text-sm font-normal text-gray-300 mb-1">{{ expiry_date
-                                }}</span>
-                            <span id="countdown-timer" class="text-xl">Loading...</span>
-                        </p>
-                    </div>
-                    <div class="text-purple-400 text-sm">
-                        <i class="fas fa-calendar-alt mr-1"></i> Renewal date
-                    </div>
-                </div>
-                {% else %}
-                <div id="subscription-info" style="display:none;">No subscription</div>
-                <div class="bg-gray-700 p-5 rounded-xl shadow-md stat-card">
-                    <div>
-                        <h3 class="stat-title text-gray-300">Subscription Expiration</h3>
-                        <p class="stat-value text-red-400">No subscription</p>
-                    </div>
-                    <div class="text-purple-400 text-sm">
-                        <i class="fas fa-calendar-alt mr-1"></i> Renewal date
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-
-            <!-- Quick Stats Section -->
-            <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-                <h2 class="section-title text-xl font-semibold text-white">Quick Stats</h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Auto-Buy Limit -->
-                    <!-- Gift Star Limits -->
-                    <!-- Gift Star Limits -->
-                    <div class="bg-gray-700 p-4 rounded-lg stat-card">
-                        <div class="flex items-center mb-2">
-                            <i class="fas fa-star text-yellow-400 mr-2"></i>
-                            <h3 class="font-medium text-yellow-400">Gift Star Limits</h3>
-                        </div>
-                        {% if settings.GIFT_LIMITS %}
-                        <div class="avoid-list">
-                            <ul class="text-sm text-white space-y-2">
-                                {% for gift_name, limit in settings.GIFT_LIMITS.items() %}
-                                {% set gift_id = GIFT_MAPPINGS|find_key(gift_name) %}
-                                <li class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        {% if gift_id %}
-                                        <div class="relative w-6 h-6 mr-2">
-                                            <div
-                                                class="image-placeholder w-full h-full flex items-center justify-center">
-                                                <i class="fas fa-spinner fa-spin text-gray-400 text-xs"></i>
-                                            </div>
-                                            <img src="{{ url_for('static', filename='gifts/' ~ gift_id ~ '.png') }}"
-                                                alt="{{ gift_name }}"
-                                                class="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300"
-                                                onload="this.classList.remove('opacity-0'); this.previousElementSibling.style.display = 'none';"
-                                                onerror="this.style.display='none'; this.previousElementSibling.innerHTML='<i class=\'fas fa-image text-gray-400 text-xs\'></i>';">
-                                        </div>
-                                        {% endif %}
-                                        <span>{{ gift_name }}</span>
-                                    </div>
-                                    <span class="bg-gray-600 px-2 py-1 rounded text-xs font-medium">{{ limit }}⭐</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                
+                <div class="flex gap-4">
+                    <button data-bot-status="{{ 'running' if bot_status else 'stopped' }}"
+                        onclick="showConfirmDialog(this)"
+                        class="px-8 py-3 rounded-xl font-bold text-lg flex items-center justify-center transition {% if bot_status %}btn-neon-red{% else %}btn-neon-green{% endif %} shadow-lg">
+                        {% if bot_status %}
+                        <i class="fas fa-stop-circle mr-2 text-xl"></i> Savdoni To'xtatish
                         {% else %}
-                        <p class="text-gray-400 italic text-sm">Using default limit ({{
-                            settings.DEFAULT_GIFTS_TO_BUY_MAX_PRICE }}⭐) for all gifts</p>
+                        <i class="fas fa-bolt mr-2 text-xl"></i> Snipingni Boshlash
                         {% endif %}
-                    </div>
-
-                    <!-- Scan Interval -->
-                    <div class="bg-gray-700 p-4 rounded-lg stat-card">
-                        <div class="flex items-center mb-2">
-                            <i class="fas fa-sync-alt text-purple-400 mr-2"></i>
-                            <h3 class="font-medium text-purple-400">Scan Interval</h3>
-                        </div>
-                        <p class="text-xl font-bold text-white">{{ settings.SLEEP_BETWEEN_CYCLES }}s</p>
-                        <p class="text-xs text-gray-400 mt-1">Between checks</p>
-                    </div>
-
-                    <!-- Gifts to Avoid -->
-                    <div class="bg-gray-700 p-4 rounded-lg stat-card">
-                        <div class="flex items-center mb-2">
-                            <i class="fas fa-ban text-red-400 mr-2"></i>
-                            <h3 class="font-medium text-red-400">Gifts to Avoid</h3>
-                        </div>
-                        {% if settings.GIFTS_NOT_TO_BUY %}
-                        <div class="avoid-list">
-                            <ul class="text-sm text-white space-y-2">
-                                {% for gift in settings.GIFTS_NOT_TO_BUY %}
-                                {% set gift_id = GIFT_MAPPINGS|find_key(gift) %}
-                                <li class="flex items-center">
-                                    {% if gift_id %}
-                                    <div class="relative w-6 h-6 mr-2">
-                                        <div class="image-placeholder w-full h-full flex items-center justify-center">
-                                            <i class="fas fa-spinner fa-spin text-gray-400 text-xs"></i>
-                                        </div>
-                                        <img src="{{ url_for('static', filename='gifts/' ~ gift_id ~ '.png') }}"
-                                            alt="{{ gift }}"
-                                            class="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300"
-                                            onload="this.classList.remove('opacity-0'); this.previousElementSibling.style.display = 'none';"
-                                            onerror="this.style.display='none'; this.previousElementSibling.innerHTML='<i class=\'fas fa-image text-gray-400 text-xs\'></i>';">
-                                    </div>
-                                    {% endif %}
-                                    <span>{{ gift }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% else %}
-                        <p class="text-gray-400 italic text-sm">No gifts selected to avoid</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Backdrops to Avoid -->
-                    <!-- Backdrops to Avoid -->
-                    <div class="bg-gray-700 p-4 rounded-lg stat-card flex flex-col"> <!-- Add flex flex-col here -->
-                        <div class="flex items-center mb-2">
-                            <i class="fas fa-image text-yellow-400 mr-2"></i>
-                            <h3 class="font-medium text-yellow-400">Backdrops to Avoid</h3>
-                        </div>
-                        {% if settings.BACKDROPS_NOT_TO_BUY %}
-                        <div class="avoid-list max-h-40 overflow-y-auto pr-2 mt-0">
-                            <!-- Add mt-0 to remove any default margin -->
-                            <ul class="text-sm text-white">
-                                {% for backdrop in settings.BACKDROPS_NOT_TO_BUY %}
-                                <li class="flex items-center py-1"> <!-- Add py-1 for consistent padding -->
-                                    {% if backdrop in BACKDROP_CENTER_COLORS %}
-                                    <span class="w-4 h-4 rounded-full mr-2 border border-gray-400/30"
-                                        style="background-color: {{ BACKDROP_CENTER_COLORS[backdrop] }}"></span>
-                                    {% endif %}
-                                    <span>{{ backdrop }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% else %}
-                        <p class="text-gray-400 italic text-sm">No backdrops selected to avoid</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Logs Section -->
-            <div class="bg-gray-800 rounded-xl shadow-lg p-6">
-                <h2 class="section-title text-xl font-semibold text-white">Recent Activity</h2>
-
-                <div class="bg-gray-900 rounded-lg p-4 h-64 overflow-y-auto quick-logs">
-                    <ul id="quick-logs-content" class="space-y-2 font-mono text-sm">
-                        <!-- Logs will appear here -->
-                        <li class="text-gray-400 italic">Loading activity logs...</li>
-                    </ul>
-                </div>
-
-                <!-- Pagination Controls -->
-                <div id="pagination-controls" class="flex justify-between items-center mt-3 hidden">
-                    <button id="prev-page"
-                        class="hidden px-3 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
-                        ← Previous
-                    </button>
-                    <span id="page-info" class="text-gray-400 text-sm"></span>
-                    <button id="next-page"
-                        class="hidden px-3 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
-                        Next →
                     </button>
                 </div>
             </div>
         </div>
-        <!-- Display Flash Messages -->
-        <div id="notification-container" class="notification-container"> {% with messages =
-            get_flashed_messages(with_categories=true) %}
-            {% if messages %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column: NFT Targets -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Target Gifts (Marketplace Grid) -->
+                <div>
+                    <div class="flex justify-between items-end mb-6">
+                        <h2 class="text-2xl font-bold text-white"><i class="fas fa-crosshairs text-blue-500 mr-2"></i> Sniping Maqsadlari</h2>
+                        <a href="/settings/gift_limits" class="text-sm text-blue-400 hover:text-blue-300 flex items-center">Barchasini sozlash <i class="fas fa-arrow-right ml-1"></i></a>
+                    </div>
+                    
+                    {% if settings.GIFT_LIMITS %}
+                    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {% for gift_name, limit in settings.GIFT_LIMITS.items() %}
+                        {% set gift_id = GIFT_MAPPINGS|find_key(gift_name) %}
+                        <div class="glass-card p-4 group cursor-pointer relative">
+                            <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur rounded-full px-2 py-1 text-xs font-bold text-yellow-400 z-10 border border-yellow-500/30 shadow-lg">
+                                Maks: {{ limit }}⭐
+                            </div>
+                            <div class="nft-image-container mb-4">
+                                <i class="fas fa-spinner fa-spin text-gray-500 text-2xl absolute"></i>
+                                {% if gift_id %}
+                                <img src="{{ url_for('static', filename='gifts/' ~ gift_id ~ '.png') }}" alt="{{ gift_name }}" class="nft-image z-10" onload="this.previousElementSibling.style.display='none'">
+                                {% else %}
+                                <i class="fas fa-gift text-4xl text-gray-600 z-10"></i>
+                                {% endif %}
+                            </div>
+                            <h3 class="font-semibold text-white truncate text-center">{{ gift_name }}</h3>
+                            <div class="mt-2 w-full bg-blue-500/10 text-blue-400 text-xs text-center py-1.5 rounded-lg border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition">
+                                Qidirilmoqda
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="glass-card p-12 text-center border-dashed border-2 border-slate-700">
+                        <i class="fas fa-robot text-6xl text-slate-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-300">Maxsus Limitlar Yo'q</h3>
+                        <p class="text-gray-500 mt-2">Barcha sovg'alar umumiy standart limit ({{ settings.DEFAULT_GIFTS_TO_BUY_MAX_PRICE }}⭐) narxida olinmoqda.</p>
+                        <a href="/settings/gift_limits" class="mt-4 inline-block btn-neon-blue px-6 py-2 rounded-lg">Limitlarni qo'shish</a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Avoid Lists -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-bold text-white mb-4"><i class="fas fa-ban text-red-500 mr-2"></i> Qora Ro'yxat (NFT)</h3>
+                        {% if settings.GIFTS_NOT_TO_BUY %}
+                        <div class="flex flex-wrap gap-2">
+                            {% for gift in settings.GIFTS_NOT_TO_BUY %}
+                            <span class="px-3 py-1.5 bg-red-500/10 border border-red-500/20 text-red-300 text-xs rounded-full flex items-center">
+                                {{ gift }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-sm text-gray-500">Olinmaydigan sovg'alar kiritilmagan.</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-bold text-white mb-4"><i class="fas fa-image text-purple-500 mr-2"></i> Qora Ro'yxat (Fon)</h3>
+                        {% if settings.BACKDROPS_NOT_TO_BUY %}
+                        <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto pr-2">
+                            {% for backdrop in settings.BACKDROPS_NOT_TO_BUY %}
+                            <span class="px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs rounded-full flex items-center">
+                                {% if backdrop in BACKDROP_CENTER_COLORS %}
+                                <span class="w-2.5 h-2.5 rounded-full mr-2" style="background-color: {{ BACKDROP_CENTER_COLORS[backdrop] }}"></span>
+                                {% endif %}
+                                {{ backdrop }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-sm text-gray-500">Olinmaydigan fonlar kiritilmagan.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Activity & Subscription -->
+            <div class="space-y-8">
+                
+                <!-- Subscription -->
+                <div class="glass-card p-6 border-t-4 border-t-purple-500 relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-10">
+                        <i class="fas fa-crown text-9xl text-purple-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 relative z-10"><i class="fas fa-crown text-purple-400 mr-2"></i> Obuna Holati</h3>
+                    {% if expiry_timestamp %}
+                    <div id="subscription-info" data-expiry="{{ expiry_timestamp }}" style="display:none;"></div>
+                    <div class="mt-4 relative z-10">
+                        <div class="text-sm text-gray-400 mb-1">Amal qilish muddati:</div>
+                        <div class="font-mono text-2xl font-bold text-white" id="countdown-timer">Yuklanmoqda...</div>
+                        <div class="text-xs text-purple-300 mt-2" id="expiry-date">{{ expiry_date }}</div>
+                    </div>
+                    {% else %}
+                    <div class="mt-4 relative z-10">
+                        <div class="text-red-400 font-bold text-xl">Aktiv Obuna Yo'q</div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="glass-card p-0 flex flex-col h-[500px]">
+                    <div class="p-6 border-b border-slate-700/50 flex justify-between items-center bg-slate-800/30 rounded-t-xl">
+                        <h3 class="text-lg font-bold text-white"><i class="fas fa-list-ul text-emerald-400 mr-2"></i> Tranzaksiyalar</h3>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto activity-feed p-4">
+                        <ul id="quick-logs-content" class="space-y-3 font-mono text-sm leading-relaxed">
+                            <!-- Logs injected here -->
+                            <li class="text-center text-slate-500 py-8">
+                                <i class="fas fa-satellite-dish text-3xl mb-2 opacity-50 block"></i>
+                                Ma'lumot kutilmoqda...
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Pagination (Hidden by default, updated via JS) -->
+                    <div id="pagination-controls" class="p-4 border-t border-slate-700/50 flex justify-between items-center bg-slate-800/30 rounded-b-xl hidden">
+                        <button id="prev-page" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded text-xs transition">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="page-info" class="text-xs text-slate-400"></span>
+                        <button id="next-page" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded text-xs transition">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div id="confirmDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-card p-8 w-full max-w-sm transform scale-95 transition-transform duration-300 border-t-4 border-t-blue-500">
+            <h2 class="text-xl font-bold mb-4 text-white" id="confirmTitle">Tasdiqlash</h2>
+            <p class="text-gray-300 mb-6" id="confirmMessage">Rostan ham ushbu amalni bajarmoqchimisiz?</p>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeConfirmDialog()" class="px-5 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white transition font-medium">Bekor qilish</button>
+                <button id="confirmAction" class="px-5 py-2.5 rounded-lg text-white font-bold transition"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash Notifications -->
+    <div id="notification-container" class="notification-container"> 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
             {% for category, message in messages %}
-            <div class="notification {{ category }} mb-3">
+            <div class="notification {{ category }}">
                 <i class="notification-icon 
-                            {% if category == 'success' %}fas fa-check-circle
-                            {% elif category == 'error' %}fas fa-exclamation-circle
-                            {% elif category == 'warning' %}fas fa-exclamation-triangle
-                            {% else %}fas fa-info-circle{% endif %}"></i>
-                <span>{{ message }}</span>
-                <span class="notification-close" onclick="this.parentElement.remove()">
+                    {% if category == 'success' %}fas fa-check-circle text-emerald-400
+                    {% elif category == 'error' %}fas fa-exclamation-circle text-red-400
+                    {% elif category == 'warning' %}fas fa-exclamation-triangle text-amber-400
+                    {% else %}fas fa-info-circle text-blue-400{% endif %}"></i>
+                <span class="flex-1 text-sm font-medium">{{ message }}</span>
+                <span class="notification-close ml-3 hover:text-white" onclick="this.parentElement.remove()">
                     <i class="fas fa-times"></i>
                 </span>
             </div>
             {% endfor %}
-            {% endif %}
-            {% endwith %}
-        </div>
-        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-    </body>
+        {% endif %}
+        {% endwith %}
+    </div>
 
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    
+    <!-- Animation script for dialog -->
+    <script>
+        // Override the default confirm dialog behavior slightly to add animations
+        const originalShow = window.showConfirmDialog;
+        const originalClose = window.closeConfirmDialog;
+        
+        window.showConfirmDialog = function(btn) {
+            const dialog = document.getElementById('confirmDialog');
+            dialog.classList.remove('hidden');
+            // small delay for transition to kick in
+            setTimeout(() => {
+                dialog.classList.remove('opacity-0');
+                dialog.querySelector('.glass-card').classList.remove('scale-95');
+                dialog.querySelector('.glass-card').classList.add('scale-100');
+            }, 10);
+            
+            // set up the content
+            const action = btn.getAttribute('data-bot-status') === 'running' ? 'stop' : 'start';
+            const title = document.getElementById('confirmTitle');
+            const msg = document.getElementById('confirmMessage');
+            const actionBtn = document.getElementById('confirmAction');
+
+            if (action === 'stop') {
+                title.textContent = "Botni to'xtatish";
+                title.className = "text-xl font-bold mb-4 text-red-400";
+                msg.textContent = "Bot ishini to'xtatmoqchimisiz? Sniping jarayoni to'xtaydi.";
+                actionBtn.textContent = "To'xtatish";
+                actionBtn.className = "px-5 py-2.5 rounded-lg font-bold transition btn-neon-red text-white";
+            } else {
+                title.textContent = "Botni ishga tushirish";
+                title.className = "text-xl font-bold mb-4 text-green-400";
+                msg.textContent = "Botni ishga tushirmoqchimisiz? Sniping boshlanadi.";
+                actionBtn.textContent = "Ishga Tushirish";
+                actionBtn.className = "px-5 py-2.5 rounded-lg font-bold transition btn-neon-green text-white";
+            }
+            
+            actionBtn.onclick = () => {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/toggle_bot';
+                document.body.appendChild(form);
+                form.submit();
+            };
+        };
+        
+        window.closeConfirmDialog = function() {
+            const dialog = document.getElementById('confirmDialog');
+            dialog.classList.add('opacity-0');
+            dialog.querySelector('.glass-card').classList.remove('scale-100');
+            dialog.querySelector('.glass-card').classList.add('scale-95');
+            setTimeout(() => {
+                dialog.classList.add('hidden');
+            }, 300);
+        };
+    </script>
+</body>
 </html>

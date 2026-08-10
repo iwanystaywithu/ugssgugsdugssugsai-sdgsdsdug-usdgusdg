@@ -7,7 +7,39 @@
         <title>Sozlamalar - GiftSniper</title>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a !important;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-neon-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+            color: white !important;
+            border: none;
+        }
+        .btn-neon-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+            color: white !important;
+            border: none;
+        }
             /* Notification System */
             .notification-container {
                 position: fixed;
@@ -444,29 +476,28 @@
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0/dist/js/tom-select.complete.min.js"></script>
     </head>
 
-    <body class="dark-mode bg-gray-900 min-h-screen">
+    <body >
         <div class="container mx-auto px-4 py-8">
-            <!-- Header Section -->
             <div id="unsaved-warning"
                 class="hidden bg-yellow-500 text-yellow-100 px-4 py-3 rounded-md flex items-center gap-3 shadow-lg mb-4">
                 <i class="fas fa-exclamation-triangle text-xl"></i>
                 <span class="text-sm font-medium">
-                    You have unsaved changes. Please save before navigating away!
+                    Saqlanmagan o'zgarishlar mavjud. Ketmoqdan oldin saqlang!
                 </span>
                 <button onclick="this.parentElement.classList.add('hidden')" class="ml-auto focus:outline-none">
                     <i class="fas fa-times text-yellow-200 hover:text-white"></i>
                 </button>
             </div>
-            <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+            <div class="glass-card rounded-xl p-6 mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-white mb-1">Settings</h1>
-                        <p class="text-gray-400 text-sm">Configure your Gift Sniper preferences</p>
+                        <h1 class="text-3xl font-bold text-white mb-1">Sozlamalar</h1>
+                        <p class="text-gray-400 text-sm">GiftSniper'ning asosiy parametrlarini sozlang</p>
                     </div>
 
                     <div>
-                        <a href="/" class="back-btn bg-blue-600 text-white hover:bg-blue-700 flex items-center">
-                            <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                        <a href="/" class="back-btn btn-neon-blue text-white  flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i>Bosh Sahifaga
                         </a>
                     </div>
                 </div>
@@ -476,61 +507,61 @@
                 <!-- General and Buying Settings -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- General Settings -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                        <h2 class="section-title text-gray-300">General Settings</h2>
+                    <div class="glass-card p-6 rounded-xl section-card">
+                        <h2 class="section-title text-gray-300">Umumiy Sozlamalar</h2>
 
                         <div class="space-y-5">
                             <div>
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <label class="form-label">Gift Star Limits</label>
-                                        <p class="text-gray-400 text-xs mt-1">Set individual star limits for each gift
+                                        <label class="form-label">Sovg'a Yulduz Chegaralari</label>
+                                        <p class="text-gray-400 text-xs mt-1">Har bir sovg'a uchun alohida yulduz chegrasini o'rnating
                                         </p>
                                     </div>
                                     <a href="/settings/gift-limits"
                                         class="login-btn bg-purple-600 text-white hover:bg-purple-700 flex items-center">
-                                        <i class="fas fa-cog mr-2"></i> Configure Limits
+                                        <i class="fas fa-cog mr-2"></i> Chegaralarni Sozlash
                                     </a>
                                 </div>
                                 <div class="mt-2 p-3 bg-gray-700 rounded-md">
                                     <p class="text-gray-300 text-sm">
                                         {% if settings.GIFT_LIMITS %}
                                         <span class="text-green-400"><i class="fas fa-check-circle mr-1"></i>
-                                            Custom limits set for {{ settings.GIFT_LIMITS|length }} gifts</span>
+                                            {{ settings.GIFT_LIMITS|length }} ta sovg'a uchun custom chegaralar o'rnatilgan</span>
                                         {% else %}
                                         <br><span class="text-yellow-400"><i class="fas fa-exclamation-circle mr-1"></i>
-                                            No custom limits configured</span>
+                                            Custom chegaralar o'rnatilmagan</span>
                                         {% endif %}
                                     </p>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="form-label">Scan Interval (seconds)</label>
+                                <label class="form-label">Skan Oralig'i (soniya)</label>
                                 <input type="number" name="SLEEP_BETWEEN_CYCLES"
                                     value="{{ settings.SLEEP_BETWEEN_CYCLES }}" class="form-input">
-                                <p class="text-gray-400 text-xs mt-1">Delay between market scans</p>
+                                <p class="text-gray-400 text-xs mt-1">Bozor skanlaridan oraliq</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Buying Settings -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                        <h2 class="section-title text-gray-300">Buying Settings</h2>
+                    <div class="glass-card p-6 rounded-xl section-card">
+                        <h2 class="section-title text-gray-300">Sotib Olish Sozlamalari</h2>
 
                         <div class="space-y-5">
                             <!-- Gifts to Avoid -->
                             <div>
                                 <div class="flex justify-between items-center mb-2">
-                                    <label class="form-label">Gifts to Avoid</label>
+                                    <label class="form-label">Buydirmadigan Sovg'alar</label>
                                     <div class="flex space-x-2">
                                         <button type="button" onclick="selectAll('gifts-select')"
                                             class="text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded-md text-gray-300 transition-colors">
-                                            Select All
+                                            Barchasini Tanlash
                                         </button>
                                         <button type="button" onclick="deselectAll('gifts-select')"
                                             class="text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded-md text-gray-300 transition-colors">
-                                            Remove All
+                                            Barchasini Olib Tashlash
                                         </button>
                                     </div>
                                 </div>
@@ -545,23 +576,23 @@
                                 </select>
 
                                 <div class="flex justify-between mt-1">
-                                    <p class="text-gray-400 text-xs">These gifts will be skipped</p>
-                                    <p id="gifts-count" class="text-gray-400 text-xs">0 selected</p>
+                                    <p class="text-gray-400 text-xs">Bu sovg'alar o'tkazib yuboriladi</p>
+                                    <p id="gifts-count" class="text-gray-400 text-xs">0 ta tanlandi</p>
                                 </div>
                             </div>
 
                             <!-- Backdrops to Avoid -->
                             <div>
                                 <div class="flex justify-between items-center mb-2">
-                                    <label class="form-label">Backdrops to Avoid</label>
+                                    <label class="form-label">Buydirmadigan Fonlar</label>
                                     <div class="flex space-x-2">
                                         <button type="button" onclick="selectAll('backdrops-select')"
                                             class="text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded-md text-gray-300 transition-colors">
-                                            Select All
+                                            Barchasini Tanlash
                                         </button>
                                         <button type="button" onclick="deselectAll('backdrops-select')"
                                             class="text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded-md text-gray-300 transition-colors">
-                                            Remove All
+                                            Barchasini Olib Tashlash
                                         </button>
                                     </div>
                                 </div>
@@ -575,171 +606,134 @@
                                 </select>
 
                                 <div class="flex justify-between mt-1">
-                                    <p class="text-gray-400 text-xs">These backdrops will be skipped</p>
-                                    <p id="backdrops-count" class="text-gray-400 text-xs">0 selected</p>
+                                    <p class="text-gray-400 text-xs">Bu fonlar o'tkazib yuboriladi</p>
+                                    <p id="backdrops-count" class="text-gray-400 text-xs">0 ta tanlandi</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Telegram Settings -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                        <h2 class="section-title text-gray-300">Telegram Settings</h2>
+                    <div class="glass-card p-6 rounded-xl section-card">
+                        <h2 class="section-title text-gray-300">Telegram Sozlamalari</h2>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="form-label">Admin User ID</label>
+                                <label class="form-label">Admin Foydalanuvchi ID</label>
                                 <input type="text" name="ADMIN_RECIPIENT_USER"
                                     value="{{ settings.ADMIN_RECIPIENT_USER }}" class="form-input">
-                                <p class="text-gray-400 text-xs mt-1">Your Telegram User @username / ID for
-                                    notifications and gift reception.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- App Credentials -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Main App -->
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                            <h2 class="section-title text-blue-400">Main App Credentials</h2>
-
-                            <div class="space-y-5">
-                                <div>
-                                    <label class="form-label">API ID</label>
-                                    <input type="number" name="APP_API_ID" value="{{ settings.APP_API_ID }}"
-                                        class="form-input blur-input" onclick="removeBlur(this)">
-                                </div>
-
-                                <div>
-                                    <label class="form-label">API Hash</label>
-                                    <input type="text" name="APP_API_HASH" value="{{ settings.APP_API_HASH }}"
-                                        class="form-input blur-input" onclick="removeBlur(this)">
-                                </div>
-
-                                <div>
-                                    <div class="flex items-center justify-between">
-                                        <label class="form-label">Phone Number</label>
-                                        <button type="button" onclick="initLogin('app')"
-                                            class="login-btn bg-indigo-600 text-white hover:bg-indigo-700"
-                                            data-api-id="{{ settings.APP_API_ID }}"
-                                            data-api-hash="{{ settings.APP_API_HASH }}">
-                                            <i class="fas fa-sign-in-alt mr-1"></i> {{ 'Re-login' if
-                                            settings.APP_PHONE_NUMBER
-                                            else 'Login' }}
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="APP_PHONE_NUMBER"
-                                        value="{{ settings.APP_PHONE_NUMBER }}">
-                                    <input type="text"
-                                        value="{{ settings.APP_PHONE_NUMBER[:3] + '***' + settings.APP_PHONE_NUMBER[-4:] if settings.APP_PHONE_NUMBER else '' }}"
-                                        id="app-phone-input" class="form-input mt-2 cursor-pointer"
-                                        data-full="{{ settings.APP_PHONE_NUMBER }}" readonly>
-                                </div>
+                                <p class="text-gray-400 text-xs mt-1">Telegram User @username / ID eslatma va sovg'a qabul uchun.</p>
                             </div>
                         </div>
 
-                        <!-- Buyer App -->
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                            <h2 class="section-title text-green-400">Buyer App Credentials</h2>
-
-                            <div class="space-y-5">
-                                <div>
-                                    <label class="form-label">API ID</label>
-                                    <input type="number" name="BUYER_API_ID" value="{{ settings.BUYER_API_ID }}"
-                                        class="form-input blur-input" onclick="removeBlur(this)">
+                        <!-- Main App Login -->
+                        <div class="mt-6 border-t border-gray-700 pt-6">
+                            <h3 class="text-lg font-medium text-blue-400 mb-4">Asosiy Ilova Akkaunti</h3>
+                            <div class="max-w-md">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="form-label mb-0">Telefon Raqami</label>
+                                    <button type="button" onclick="initLogin('app')"
+                                        class="login-btn btn-neon-blue text-white ">
+                                        <i class="fas fa-sign-in-alt mr-1"></i> {{ 'Qayta kirish' if
+                                        settings.APP_PHONE_NUMBER
+                                        else 'Kirish' }}
+                                    </button>
                                 </div>
+                                <input type="hidden" name="APP_PHONE_NUMBER"
+                                    value="{{ settings.APP_PHONE_NUMBER }}">
+                                <input type="text"
+                                    value="{{ settings.APP_PHONE_NUMBER[:3] + '***' + settings.APP_PHONE_NUMBER[-4:] if settings.APP_PHONE_NUMBER else '' }}"
+                                    id="app-phone-input" class="form-input cursor-pointer"
+                                    data-full="{{ settings.APP_PHONE_NUMBER }}" readonly>
+                            </div>
+                        </div>
 
-                                <div>
-                                    <label class="form-label">API Hash</label>
-                                    <input type="text" name="BUYER_API_HASH" value="{{ settings.BUYER_API_HASH }}"
-                                        class="form-input blur-input" onclick="removeBlur(this)">
+                        <!-- Buyer App Login -->
+                        <div class="mt-6 border-t border-gray-700 pt-6">
+                            <h3 class="text-lg font-medium text-green-400 mb-4">Sotuvchi Ilova Akkaunti</h3>
+                            <div class="max-w-md">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="form-label mb-0">Telefon Raqami</label>
+                                    <button type="button" onclick="initLogin('buyer')"
+                                        class="login-btn bg-indigo-600 text-white hover:bg-indigo-700">
+                                        <i class="fas fa-sign-in-alt mr-1"></i> {{ 'Qayta kirish' if
+                                        settings.BUYER_PHONE_NUMBER
+                                        else 'Kirish' }}
+                                    </button>
                                 </div>
-
-                                <div>
-                                    <div class="flex items-center justify-between">
-                                        <label class="form-label">Phone Number</label>
-                                        <button type="button" onclick="initLogin('buyer')"
-                                            class="login-btn bg-indigo-600 text-white hover:bg-indigo-700"
-                                            data-api-id="{{ settings.BUYER_API_ID }}"
-                                            data-api-hash="{{ settings.BUYER_API_HASH }}">
-                                            <i class="fas fa-sign-in-alt mr-1"></i> {{ 'Re-login' if
-                                            settings.BUYER_PHONE_NUMBER
-                                            else 'Login' }}
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="BUYER_PHONE_NUMBER"
-                                        value="{{ settings.BUYER_PHONE_NUMBER }}">
-                                    <input type="text"
-                                        value="{{ settings.BUYER_PHONE_NUMBER[:3] + '***' + settings.BUYER_PHONE_NUMBER[-4:] if settings.BUYER_PHONE_NUMBER else '' }}"
-                                        id="buyer-phone-input" class="form-input mt-2 cursor-pointer"
-                                        data-full="{{ settings.BUYER_PHONE_NUMBER }}" readonly>
-                                </div>
+                                <input type="hidden" name="BUYER_PHONE_NUMBER"
+                                    value="{{ settings.BUYER_PHONE_NUMBER }}">
+                                <input type="text"
+                                    value="{{ settings.BUYER_PHONE_NUMBER[:3] + '***' + settings.BUYER_PHONE_NUMBER[-4:] if settings.BUYER_PHONE_NUMBER else '' }}"
+                                    id="buyer-phone-input" class="form-input cursor-pointer"
+                                    data-full="{{ settings.BUYER_PHONE_NUMBER }}" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <!-- Save Button -->
                 <div class="flex justify-center">
                     <button onclick="clearWarning()" type="submit"
-                        class="save-btn bg-green-600 text-white hover:bg-green-700 flex items-center">
-                        <i class="fas fa-save mr-2"></i>Save Settings
+                        class="save-btn btn-neon-green text-white  flex items-center">
+                        <i class="fas fa-save mr-2"></i>Sozlamalarni Saqlash
                     </button>
                 </div>
             </form>
         </div>
 
         <!-- Login Modal -->
-        <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-            <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-xl font-semibold text-white mb-4" id="modal-title">Login to Telegram</h3>
+        <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" onclick="handleModalClick(event)">
+            <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md" onclick="event.stopPropagation()">
+                <h3 class="text-xl font-semibold text-white mb-4" id="modal-title">Telegram'ga Kirish</h3>
 
                 <div id="login-step-phone" class="space-y-4">
                     <div>
-                        <label class="block text-gray-300 mb-2">Phone Number</label>
+                        <label class="block text-gray-300 mb-2">Telefon Raqami</label>
                         <input type="text" id="login-phone"
-                            class="w-full px-3 py-2 border rounded-md bg-gray-700 text-white" placeholder="1234567890">
+                            class="w-full px-3 py-2 border rounded-md bg-gray-700 text-white" placeholder="998901234567">
                     </div>
                     <button onclick="sendCode()"
-                        class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Send Code
+                        class="w-full py-2 btn-neon-blue text-white rounded-md ">
+                        Kodni Yuborish
                     </button>
                 </div>
 
                 <div id="login-step-code" class="space-y-4 hidden">
                     <div>
-                        <label class="block text-gray-300 mb-2">Verification Code</label>
+                        <label class="block text-gray-300 mb-2">Tasdiqlash Kodi</label>
                         <input type="text" id="login-code"
                             class="w-full px-3 py-2 border rounded-md bg-gray-700 text-white" placeholder="12345">
                     </div>
                     <button onclick="submitCode()"
-                        class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Verify
+                        class="w-full py-2 btn-neon-blue text-white rounded-md ">
+                        Tasdiqlash
                     </button>
                 </div>
 
                 <div id="login-step-2fa" class="space-y-4 hidden">
                     <div>
-                        <label class="block text-gray-300 mb-2">2FA Password</label>
+                        <label class="block text-gray-300 mb-2">2FA Parol</label>
                         <input type="password" id="login-password"
                             class="w-full px-3 py-2 border rounded-md bg-gray-700 text-white" placeholder="••••••">
                     </div>
                     <button onclick="submit2FA()"
-                        class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Authenticate
+                        class="w-full py-2 btn-neon-blue text-white rounded-md ">
+                        Kirish
                     </button>
                 </div>
             </div>
         </div>
-        <div id="notification-container" class="notification-container"> {% with messages =
-            get_flashed_messages(with_categories=true) %}
+        <div id="notification-container" class="notification-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
             <div class="notification {{ category }} mb-3">
                 <i class="notification-icon 
-                            {% if category == 'success' %}fas fa-check-circle
-                            {% elif category == 'error' %}fas fa-exclamation-circle
-                            {% elif category == 'warning' %}fas fa-exclamation-triangle
-                            {% else %}fas fa-info-circle{% endif %}"></i>
+                    {% if category == 'success' %}fas fa-check-circle
+                    {% elif category == 'error' %}fas fa-exclamation-circle
+                    {% elif category == 'warning' %}fas fa-exclamation-triangle
+                    {% else %}fas fa-info-circle{% endif %}"></i>
                 <span>{{ message }}</span>
                 <span class="notification-close" onclick="this.parentElement.remove()">
                     <i class="fas fa-times"></i>
@@ -761,7 +755,6 @@
                     warningMessage.classList.remove("hidden");
                 };
 
-                // Listen to all input, textarea, select
                 form.querySelectorAll("input, select, textarea").forEach(input => {
                     input.addEventListener("input", markDirty);
                     input.addEventListener("change", markDirty);

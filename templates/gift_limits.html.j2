@@ -7,7 +7,39 @@
         <title>Sovg'a Chegaralari - GiftSniper</title>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a !important;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-neon-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+            color: white !important;
+            border: none;
+        }
+        .btn-neon-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+            color: white !important;
+            border: none;
+        }
             /* Existing styles remain the same */
             .notification-container {
                 position: fixed;
@@ -457,29 +489,29 @@
         </style>
     </head>
 
-    <body class="dark-mode bg-gray-900 min-h-screen">
+    <body >
         <div class="container mx-auto px-4 py-8">
             <!-- Header Section -->
             <div id="unsaved-warning"
                 class="hidden bg-yellow-500 text-yellow-100 px-4 py-3 rounded-md flex items-center gap-3 shadow-lg mb-4">
                 <i class="fas fa-exclamation-triangle text-xl"></i>
                 <span class="text-sm font-medium">
-                    You have unsaved changes. Please save before navigating away!
+                    Saqlanmagan o'zgarishlar mavjud. Ketmoqdan oldin saqlang!
                 </span>
                 <button onclick="this.parentElement.classList.add('hidden')" class="ml-auto focus:outline-none">
                     <i class="fas fa-times text-yellow-200 hover:text-white"></i>
                 </button>
             </div>
-            <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+            <div class="glass-card rounded-xl p-6 mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-white mb-1">Gift Star Limits</h1>
-                        <p class="text-gray-400 text-sm">Set individual star limits for each gift</p>
+                        <h1 class="text-3xl font-bold text-white mb-1">Sovg'a Yulduz Chegaralari</h1>
+                        <p class="text-gray-400 text-sm">Har bir sovg'a uchun individual yulduz chegaralarini o'rnating</p>
                     </div>
 
                     <div>
-                        <a href="/settings" class="back-btn bg-blue-600 text-white hover:bg-blue-700 flex items-center">
-                            <i class="fas fa-arrow-left mr-2"></i>Back to Settings
+                        <a href="/settings" class="back-btn btn-neon-blue text-white  flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i>Sozlamalarga
                         </a>
                     </div>
                 </div>
@@ -487,65 +519,65 @@
 
             <form method="POST" class="space-y-8">
                 <!-- Gift Star Limits Section -->
-                <div class="bg-gray-800 p-6 rounded-xl shadow-lg section-card">
-                    <h2 class="section-title text-gray-300">Individual Gift Limits</h2>
+                <div class="glass-card p-6 rounded-xl section-card">
+                    <h2 class="section-title text-gray-300">Alohida Sovg'a Chegaralari</h2>
 
                     <!-- Bulk Edit Panel -->
                     <div class="bulk-edit-panel" id="bulk-edit-panel" style="display: none;">
                         <div class="flex items-center">
                             <span id="selected-count" class="font-medium">0</span>
-                            <span class="ml-1">gifts selected</span>
+                            <span class="ml-1">sovg'a tanlandi</span>
                         </div>
                         <div class="flex items-center">
                             <input type="number" id="bulk-star-value" class="star-input" min="0" step="1"
-                                placeholder="⭐ value">
+                                placeholder="⭐ qiymat">
                             <button type="button" class="bulk-edit-btn apply ml-2" id="apply-bulk-value">
-                                <i class="fas fa-check-circle mr-1"></i>Apply
+                                <i class="fas fa-check-circle mr-1"></i>Qo'llash
                             </button>
                         </div>
                         <div class="flex items-center">
                             <button type="button" class="bulk-edit-btn select" id="select-all">
-                                <i class="fas fa-check-square mr-1"></i>Select All
+                                <i class="fas fa-check-square mr-1"></i>Barchasini Tanlash
                             </button>
                             <button type="button" class="bulk-edit-btn deselect ml-2" id="deselect-all">
-                                <i class="fas fa-times-circle mr-1"></i>Deselect All
+                                <i class="fas fa-times-circle mr-1"></i>Barchasini Bekor qilish
                             </button>
                         </div>
                         <button type="button" class="bulk-edit-btn reset ml-auto" id="reset-bulk-edit">
-                            <i class="fas fa-undo mr-1"></i>Reset
+                            <i class="fas fa-undo mr-1"></i>Qaytarish
                         </button>
                     </div>
 
                     <!-- Filter and Sort Controls -->
                     <div class="filter-container">
                         <div class="filter-item active" data-filter="all">
-                            <i class="fas fa-list mr-2"></i>All Gifts
+                            <i class="fas fa-list mr-2"></i>Barcha Sovg'alar
                         </div>
                         <div class="filter-item" data-filter="custom">
-                            <i class="fas fa-edit mr-2"></i>Custom Limits
+                            <i class="fas fa-edit mr-2"></i>Shaxsiy Chegaralar
                         </div>
                         <div class="filter-item" data-filter="default">
-                            <i class="fas fa-star mr-2"></i>Default Limit
+                            <i class="fas fa-star mr-2"></i>Standart Chegara
                         </div>
                         <div class="filter-item" data-filter="disabled">
-                            <i class="fas fa-ban mr-2"></i>Disabled Gifts
+                            <i class="fas fa-ban mr-2"></i>O'chirilgan Sovg'alar
                         </div>
                     </div>
 
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                         <!-- Search Box -->
-                        <input type="text" id="gift-search" class="search-input md:w-1/2" placeholder="Search gifts...">
+                        <input type="text" id="gift-search" class="search-input md:w-1/2" placeholder="Sovg'alarni qidirish...">
 
                         <!-- Sort Dropdown -->
                         <div class="sort-container">
-                            <span class="sort-label">Sort by:</span>
+                            <span class="sort-label">Saralash:</span>
                             <select id="sort-gifts" class="sort-select">
-                                <option value="name-asc">Name (A-Z)</option>
-                                <option value="name-desc">Name (Z-A)</option>
-                                <option value="price-asc">Price (Low to High)</option>
-                                <option value="price-desc">Price (High to Low)</option>
-                                <option value="custom-first">Custom First</option>
-                                <option value="default-first">Default First</option>
+                                <option value="name-asc">Nomi (A-Z)</option>
+                                <option value="name-desc">Nomi (Z-A)</option>
+                                <option value="price-asc">Narxi (Kichik-Katta)</option>
+                                <option value="price-desc">Narxi (Katta-Kichik)</option>
+                                <option value="custom-first">Shaxsiy Birinchi</option>
+                                <option value="default-first">Standart Birinchi</option>
                             </select>
                         </div>
                     </div>
@@ -573,7 +605,7 @@
                             <div class="relative">
                                 <input type="number" name="GIFT_LIMIT_{{ name }}"
                                     value="{{ settings.GIFT_LIMITS.get(name, settings.DEFAULT_GIFTS_TO_BUY_MAX_PRICE) }}"
-                                    class="star-input" min="0" step="1" placeholder="⭐ limit" {% if name in
+                                    class="star-input" min="0" step="1" placeholder="⭐ chegara" {% if name in
                                     settings.GIFTS_NOT_TO_BUY %}disabled{% endif %}>
                                 <span
                                     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs">⭐</span>
@@ -585,8 +617,8 @@
 
                 <!-- Save Button -->
                 <div class="flex justify-center">
-                    <button type="submit" class="save-btn bg-green-600 text-white hover:bg-green-700 flex items-center">
-                        <i class="fas fa-save mr-2"></i>Save Limits
+                    <button type="submit" class="save-btn btn-neon-green text-white  flex items-center">
+                        <i class="fas fa-save mr-2"></i>Chegaralarni Saqlash
                     </button>
                 </div>
             </form>
@@ -702,7 +734,7 @@
                 applyBulkBtn.addEventListener('click', function () {
                     const value = parseInt(bulkStarInput.value);
                     if (isNaN(value)) {
-                        showNotification('Please enter a valid star value', 'error');
+                        showNotification('Iltimos, to\'g\'ri yulduz qiymatini kiriting', 'error');
                         return;
                     }
 

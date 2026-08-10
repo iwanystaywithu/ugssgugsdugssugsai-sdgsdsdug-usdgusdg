@@ -860,7 +860,7 @@ def validate_environment(username):
         for setting in required_settings:
             if not getattr(_config_settings, setting, None):
                 logger.error(f"Missing required setting: {setting}")
-                return {'valid': False, 'message': f'Missing required setting: {setting.replace("_", " ").title()}'}
+                return {'valid': False, 'message': f"Majburiy sozlama kiritilmagan: {setting.replace('_', ' ').title()}"}
 
         # 2. Check session files exist
         app_session_file = os.path.join(BASE_DIR, "data/sessions",
@@ -870,11 +870,11 @@ def validate_environment(username):
 
         if not os.path.exists(app_session_file):
             logger.error(f"App session file not found at {app_session_file}")
-            return {'valid': False, 'message': 'App session missing - please log in again'}
+            return {'valid': False, 'message': 'Asosiy ilova sessiyasi topilmadi - iltimos, qayta kiring'}
 
         if not os.path.exists(buyer_session_file):
             logger.error(f"Buyer session file not found at {buyer_session_file}")
-            return {'valid': False, 'message': 'Buyer session missing - please log in again'}
+            return {'valid': False, 'message': 'Sotuvchi ilova sessiyasi topilmadi - iltimos, qayta kiring'}
 
         # 3. Validate sessions and peer contact status
         async def validate_peer_contact(client, peer_id):
@@ -894,7 +894,7 @@ def validate_environment(username):
                         peer = await client.get_chat(int(peer_id) if str(peer_id).isdigit() else peer_id)
                     except Exception as e:
                         logger.error(f"Cannot resolve peer: {e}")
-                        return False, "Cannot resolve peer. Is the @username / ID correct?"
+                        return False, "Kontakt topilmadi. @username yoki ID to'g'riligini tekshiring."
 
                 resolved_id = peer.id if hasattr(peer, "id") else peer_id  # fall back to what we got
 
@@ -910,20 +910,20 @@ def validate_environment(username):
                 try:
                     await client.send_message(
                         resolved_id,
-                        "🤖 Gift Sniper connection check (please ignore)",
+                        "🤖 GiftSniper aloqa tekshiruvi (iltimos, e'tibor bermang)",
                         disable_notification=True,
                     )
-                    return True, "Peer contact verified – message delivered."
+                    return True, "Kontakt tasdiqlandi - xabar yetkazildi."
                 except Exception as e:
                     # Typical errors: BOT_PRIVACY_FORBIDDEN, PEER_ID_INVALID, etc.
                     logger.error(f"Could not message peer: {e}")
                     return (
-                        False, 'Please message this user first from your buyer account'
+                        False, "Iltimos, avval sotuvchi akkauntidan bu foydalanuvchiga xabar yuboring"
                     )
 
             except Exception as e:
                 logger.error(f"Unexpected peer‑validation error: {e}")
-                return False, f"Validation failed: {e}"
+                return False, f"Tekshirishda xato: {e}"
 
         async def validate_all():
             app_client = None
@@ -955,7 +955,7 @@ def validate_environment(username):
                     # Verify basic connectivity
                     if not (app_client.is_connected and buyer_client.is_connected):
                         logger.error("Failed to connect to Telegram servers")
-                        return {'valid': False, 'message': 'Connection failed - please try again'}
+                        return {'valid': False, 'message': "Ulanib bo'lmadi - iltimos, qaytadan urinib ko'ring"}
 
                     # Verify sessions
                     try:
@@ -963,10 +963,10 @@ def validate_environment(username):
                         buyer_me = await buyer_client.get_me()
                         if not (app_me and buyer_me):
                             logger.error("Session authorization failed")
-                            return {'valid': False, 'message': 'Session expired - please log in again'}
+                            return {'valid': False, 'message': "Sessiya muddati tugagan - iltimos, qayta kiring"}
                     except Exception as e:
                         logger.error(f"Session validation failed: {str(e)}")
-                        return {'valid': False, 'message': 'Session problem - please log in again'}
+                        return {'valid': False, 'message': "Sessiyada muammo - iltimos, qayta kiring"}
                     # Verify peer contact
                     peer_valid, peer_msg = await validate_peer_contact(
                         buyer_client,
@@ -975,7 +975,7 @@ def validate_environment(username):
                     if not peer_valid:
                         return {'valid': False, 'message': peer_msg}
 
-                    return {'valid': True, 'message': 'Ready to start!'}
+                    return {'valid': True, 'message': 'Boshlashga tayyor!'}
 
                 except sqlite3.OperationalError as e:
                     if "database is locked" in str(e) and attempt < max_retries - 1:
@@ -985,10 +985,10 @@ def validate_environment(username):
                         await asyncio.sleep(retry_delay)
                         continue
                     logger.error(f"Database error: {str(e)}")
-                    return {'valid': False, 'message': 'System busy - please try again'}
+                    return {'valid': False, 'message': "Tizim band - iltimos, qaytadan urinib ko'ring"}
                 except Exception as e:
                     logger.error(f"Validation error: {str(e)}")
-                    return {'valid': False, 'message': 'Setup incomplete - please check configuration'}
+                    return {'valid': False, 'message': "Sozlash tugallanmagan - sozlamalarni tekshiring"}
                 finally:
                     try:
                         if app_client and app_client.is_connected:
