@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: giftsniper
+    ports:
+      - "5913:5913"
+    environment:
+      - IS_DOMAIN=false
+      - FLASK_ENV=production
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
