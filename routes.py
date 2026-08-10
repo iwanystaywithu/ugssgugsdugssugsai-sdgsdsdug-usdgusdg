@@ -335,65 +335,24 @@ def handle_2fa():
             bot_manager.active_clients[username][login_type] = client
 
 
-# <!-- Global Login Check Middleware -->
+# <!-- Global Login Check Middleware - DISABLED FOR OPEN ACCESS -->
 @app.before_request
 def check_login_and_expiry():
-    # Skip for these endpoints
-    if request.endpoint in ['login', 'login_page', 'static']:
-        return
-        
-    # Existing user check
-    if 'username' not in session:
-        flash('You must log in first.', 'error')
-        return redirect(url_for('login'))
-    
-    user_manager = models.UserManager()
-    user = user_manager.get_user(session['username'])
-    # Check if user is an admin
-    if user_manager.is_admin(session['username']):
-        g.username = session['username']
-        g.admin = True
-        return
-    # Check if user is active
-    if not user.active:
-        session.clear()
-        flash('Your account has been disabled', 'error')
-        return redirect(url_for('login'))
-    
-    g.username = session['username']
-    
-    # Check expiration (skip for admin)
-    if user_manager.is_expired(session['username']):
-        expiration_date = user_manager.get_user(session['username']).expire_date
-        session.clear()
-        return render_template('expired.html', expiry_date=expiration_date)
+    # Auto-login to default user "ashur" - No authentication required
+    g.username = 'ashur'
+    g.admin = True
+    session['username'] = 'ashur'
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        user_manager = models.UserManager()
-        username = request.form['username']
-        password = request.form['password']
-        
-        # Regular user login
-        user = user_manager.authenticate(username, password)
-        if user:
-            session['username'] = username
-            g.username = username
-            if user_manager.is_expired(username):
-                expiration_date = user_manager.get_user(username).expire_date
-                return render_template('expired.html', expiry_date=expiration_date)
-            return redirect(url_for('index'))
-            
-        flash('Invalid credentials')
-    return render_template('login.html.j2')
+    # Login disabled - redirect directly to index
+    return redirect(url_for('index'))
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    session.pop('username', None)  # Remove logged-in status
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('login'))  # Redirect to the login page
+    # Logout disabled - redirect to index
+    return redirect(url_for('index'))
 
 
 @app.route('/save-subscription', methods=['POST'])
